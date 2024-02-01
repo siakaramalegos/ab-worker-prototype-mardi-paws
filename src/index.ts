@@ -15,6 +15,8 @@ export default {
 
     const { host, pathname, search, searchParams } = new URL(request.url);
     const cookies = parse(request.headers.get('cookie') || '');
+    // The new user personalization currently is:
+    // ?experiment=siakaramalegos/ab-worker-prototype-mardi-paws/main/experiments/new-user-personalization.json?token=GHSAT0AAAAAACJ6H63YIGF4XGPVCXHMDT7SZN4BMTA
     const experiment = searchParams.get('experiment') ?? cookies['experiment'] ?? '';
     const rewrittenControlUrl = new URL(pathname + search, 'https://mardipaws.myshopify.com/');
     const controlRequest = fetch(rewrittenControlUrl, {
@@ -28,8 +30,7 @@ export default {
     // Cheap wrangler-cli [l] dev check
     const isLocalDevMode = host.startsWith('localhost') || host.startsWith('127.0.0.1');
     // If no experipment requested, return control.
-    if (true) {
-    // if (!experiment) {
+    if (!experiment) {
       const controlResponse = await controlRequest;
       const mutableResponse = new Response(controlResponse.body, controlResponse);
       mutableResponse.headers.set('set-cookie', `experiment=${experiment}; Secure; Path=/`);
