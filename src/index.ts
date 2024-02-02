@@ -17,7 +17,8 @@ export default {
     const cookies = parse(request.headers.get('cookie') || '');
     // The new user personalization currently is:
     // ?experiment=siakaramalegos/ab-worker-prototype-mardi-paws/main/experiments/new-user-personalization.json
-    const experiment = searchParams.get('experiment') ?? cookies['experiment'] ?? '';
+    // Force to always use URL params
+    const experiment = searchParams.get('experiment') //?? cookies['experiment'] ?? '';
     const rewrittenControlUrl = new URL(pathname + search, 'https://mardipaws.myshopify.com/');
     const controlRequest = fetch(rewrittenControlUrl, {
       headers: {
