@@ -37,11 +37,14 @@ export default {
       mutableResponse.headers.set('set-cookie', `experiment=${experiment}; Secure; Path=/`);
       return mutableResponse;
     }
-    const abConfigurationRequest = fetch(`https://raw.githubusercontent.com/${experiment}`);
-    const federatedCalls = new Array<Promise<Response>>(controlRequest, abConfigurationRequest);
-    const responses = await Promise.all(federatedCalls);
-    const controlResponse = responses[0];
-    const abConfiguration = await responses[1].json() as ABConfigurationAPIResponse;
+    // const abConfigurationRequest = fetch(`https://raw.githubusercontent.com/${experiment}`);
+    // const federatedCalls = new Array<Promise<Response>>(controlRequest, abConfigurationRequest);
+    // const responses = await Promise.all(federatedCalls);
+    // const controlResponse = responses[0];
+    const controlResponse = await controlRequest;
+    const abConfiguration = require('../experiments/new-user-personalization.json')
+
+    // const abConfiguration = await responses[1].json() as ABConfigurationAPIResponse;
     const transformations = abConfiguration.transformations;
 
     const mutableResponse = new Response(controlResponse.body, controlResponse);
